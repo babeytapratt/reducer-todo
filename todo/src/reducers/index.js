@@ -1,16 +1,40 @@
-import { SET_ADD_TODO, SET_SELECT_TODO, SET_CLEAR_TODO, SET_EDIT_TODO } from './../actions'
-
-const reducer = (state, action) => {
-    switch(action.type) {
-        case(SET_ADD_TODO):
-            return({...state, Addtodo:action.payload});
-        case(SET_SELECT_TODO):
-            return({...state, selectTodo:action.payload });
-        case(SET_CLEAR_TODO):
-            return({...state, clearTodo:action.payload});
-        case(SET_EDIT_TODO):
-            return({...state, editTodo:action.payload});
-        default:
-            return(state);
-    }
+export const initialState = {
+    todos: [
+        {
+        todo: "",
+        completed: false,
+        }
+    ]
 }
+
+export const reducer = (state, action) => {
+    switch (action.type) {
+      case "SET_ADD_TODO":
+        const newTodoItem = {
+          todo: action.payload,
+          completed: false,
+        };
+        return {
+          ...state,
+          todos: [...state.todos, newTodoItem],
+        };
+      case "SET_TOGGLE_TODO":
+        return {
+          ...state,
+          todos: state.todos.map((item) => {
+            if (item.id === action.id) {
+              return { ...item, completed: !item.completed };
+            } else {
+              return item;
+            }
+          }),
+        };
+      case "SET_CLEAR_TODO":
+        return {
+          ...state,
+          todos: state.todos.filter((item) => !item.completed),
+        };
+      default:
+        return state;
+    }
+  };

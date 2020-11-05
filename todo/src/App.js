@@ -1,40 +1,38 @@
-import React, { useState, useRender } from 'react';
-import reducer from './reducers'
+import React, { useState, useReducer } from 'react';
+import { initialState, reducer } from './reducers/index'
 import './App.css';
-import { setNewTodo, setClearTodo, setSelectTodo, setEditTodo } from './actions'
-
-const Todo = () => {
-  const initialState = {
-    newTodo: "",
-    editTodo: false
-  }
-
-  const [state, dispatch] = useReducer(reducer, initialState);
-
-  const handleChanges = e => {
-
-  }
-}
+import TodoForm from './TodoFrom'
+import TodoList from './TodoList'
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  const add = (todoTitle) => {
+    dispatch({ type: "SET_ADD_TODO", payload: todoTitle });
+  }
+
+  const clearTodo = () => {
+    dispatch({ type: "SET_CLEAR_TODO" });
+  }
+
+  const toggleTodoCompleted = (id) => {
+    dispatch({ type: "SET_TOGGLE_TODO" })
+  }
+
+// class methods to update state
+    return (
+        <div className="App">
+              <h1>Todo App</h1>
+              <TodoForm add={add} />
+              <TodoList
+                todos={state.todos}
+                clearTodo={clearTodo}
+                toggleTodoCompleted={toggleTodoCompleted}
+              />
+        </div>
+
+    )
 }
+
 
 export default App;
